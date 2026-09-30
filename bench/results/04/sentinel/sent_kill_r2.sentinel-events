@@ -1,0 +1,3 @@
+22910:X 30 Sep 2026 13:56:08.130 # +sdown master pad-master 127.0.0.1 6380
+22910:X 30 Sep 2026 13:56:08.221 # +odown master pad-master 127.0.0.1 6380 #quorum 3/2
+22910:X 30 Sep 2026 13:56:09.268 # +switch-master pad-master 127.0.0.1 6380 127.0.0.1 6381

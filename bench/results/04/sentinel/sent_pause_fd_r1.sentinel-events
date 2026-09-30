@@ -1,0 +1,3 @@
+21461:X 30 Sep 2026 13:52:41.450 # +sdown master pad-master 127.0.0.1 6380
+21461:X 30 Sep 2026 13:52:41.551 # +odown master pad-master 127.0.0.1 6380 #quorum 3/2
+21461:X 30 Sep 2026 13:52:42.346 # +switch-master pad-master 127.0.0.1 6380 127.0.0.1 6381

@@ -1,0 +1,3 @@
+20737:X 30 Sep 2026 13:50:58.389 # +sdown master pad-master 127.0.0.1 6380
+20737:X 30 Sep 2026 13:50:58.466 # +odown master pad-master 127.0.0.1 6380 #quorum 2/2
+20737:X 30 Sep 2026 13:51:00.637 # +switch-master pad-master 127.0.0.1 6380 127.0.0.1 6381

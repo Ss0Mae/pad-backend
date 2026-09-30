@@ -1,0 +1,3 @@
+24357:X 30 Sep 2026 13:59:30.662 # +sdown master pad-master 127.0.0.1 6380
+24357:X 30 Sep 2026 13:59:30.725 # +odown master pad-master 127.0.0.1 6380 #quorum 3/2
+24357:X 30 Sep 2026 13:59:30.986 # +switch-master pad-master 127.0.0.1 6380 127.0.0.1 6382

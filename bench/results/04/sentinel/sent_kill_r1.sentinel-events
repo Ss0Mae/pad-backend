@@ -1,0 +1,3 @@
+19999:X 30 Sep 2026 13:49:15.847 # +sdown master pad-master 127.0.0.1 6380
+19999:X 30 Sep 2026 13:49:16.992 # +odown master pad-master 127.0.0.1 6380 #quorum 3/2
+19999:X 30 Sep 2026 13:49:17.049 # +switch-master pad-master 127.0.0.1 6380 127.0.0.1 6382

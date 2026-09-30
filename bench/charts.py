@@ -98,7 +98,7 @@ def stage2():
     label(axs[2],b1,'{:.0f}%'); label(axs[2],b2,'{:.1f}%'); axs[2].set_title('CPU 평균 (%)'); axs[2].legend(frameon=False)
     for ax in axs: ax.set_xticks(list(x)); ax.set_xticklabels([names[k] for k in keys])
     a0=rows[keys[0]][0][0]
-    fig.suptitle(f"2단계 · 서버 2대, 사용자 {a0['messages']//a0['sent_rate']//30*0+int(jload(f'{R}/02/{keys[0]}_r1.json')['USERS'])}명·{a0['sent_rate']:.0f} msg/s (2회 평균)",x=0.01,ha='left',fontsize=14,fontweight='bold')
+    fig.suptitle(f"2단계 · 서버 2대(t3.small 1대의 프로세스 2개), 사용자 {jload(f'{R}/02/{keys[0]}_r1.json')['USERS']}명·{a0['sent_rate']:.0f} msg/s (2회 평균)",x=0.01,ha='left',fontsize=14,fontweight='bold')
     fig.tight_layout(); fig.savefig(f'{OUT}/02-two-servers-adapter.png',dpi=150); plt.close(fig)
 
 def stage3():

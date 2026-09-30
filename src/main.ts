@@ -5,11 +5,19 @@ import { config } from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RedisIoAdapter } from '@src/chat/redis-io.adapter';
 config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
+
+  // 채팅 서버를 여러 대로 늘려도 메시지가 모든 서버의 소켓에 닿도록 Redis 어댑터 사용
+  if (process.env.CHAT_REDIS_ADAPTER !== 'off') {
+    const redisIoAdapter = new RedisIoAdapter(app);
+    await redisIoAdapter.connectToRedis();
+    app.useWebSocketAdapter(redisIoAdapter);
+  }
   app.enableCors({
     origin: [
       'http://localhost:5173',

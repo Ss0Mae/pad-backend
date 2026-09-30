@@ -77,13 +77,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (targetSocket.length) {
       // 유저2의 소켓 가져오기
       const target = targetSocket[0];
-      const sockets = await this.server.fetchSockets();
-      const userSocket = sockets.find(
-        socket => socket.id === target.toString()
-      );
 
       // 유저2의 채널 리스트에 해당 채널 추가
-      userSocket.emit('channelAdded', channel);
+      // 소켓 id 로 보내면 Redis 어댑터가 유저2가 붙은 서버로 전달한다.
+      // (이전: 이 서버의 소켓 목록에서만 찾아, 다른 서버에 붙은 유저2면 undefined.emit 으로 예외)
+      this.server.to(target.toString()).emit('channelAdded', channel);
       console.log(`channel ${channelId} added in ${userId2} channel list`);
     } else {
       // 오프라인 일때

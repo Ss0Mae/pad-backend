@@ -1,0 +1,8 @@
+28443:S 30 Sep 2026 14:08:34.950 * FAIL message received from bc63b6c2746c0a02a49c6295564234e4ae65631f about e2fd52c1ef61ff8e753098db1ae8e1d4889c2635
+28450:S 30 Sep 2026 14:08:00.363 * Before turning into a replica, using my own master parameters to synthesize a cached master: I may be able to synchronize with the new master with just a partial transfer.
+28450:S 30 Sep 2026 14:08:34.949 * FAIL message received from bc63b6c2746c0a02a49c6295564234e4ae65631f about e2fd52c1ef61ff8e753098db1ae8e1d4889c2635
+28457:S 30 Sep 2026 14:08:00.363 * Before turning into a replica, using my own master parameters to synthesize a cached master: I may be able to synchronize with the new master with just a partial transfer.
+28457:S 30 Sep 2026 14:08:34.949 * FAIL message received from bc63b6c2746c0a02a49c6295564234e4ae65631f about e2fd52c1ef61ff8e753098db1ae8e1d4889c2635
+28457:S 30 Sep 2026 14:08:35.610 # Starting a failover election for epoch 7.
+28457:S 30 Sep 2026 14:08:35.618 # Failover election won: I'm the new master.
+28457:S 30 Sep 2026 14:08:35.618 # configEpoch set to 7 after successful failover

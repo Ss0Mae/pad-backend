@@ -1,0 +1,18 @@
+## 7000 master
+addr=127.0.0.1:7000 fd=20 name= age=6 idle=0 flags=S db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7000 fd=9 name=ioredis-cluster(subscriber) age=1 idle=1 flags=P db=0 sub=6 psub=2 ssub=0 multi=-1 qbuf=0 
+## 7001 master
+addr=127.0.0.1:7001 fd=20 name= age=6 idle=0 flags=S db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7001 fd=21 name= age=1 idle=1 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7001 fd=22 name= age=1 idle=1 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+## 7002 master
+addr=127.0.0.1:7002 fd=20 name= age=6 idle=0 flags=S db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7002 fd=21 name= age=1 idle=1 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7002 fd=22 name= age=1 idle=1 flags=N db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=20474 argv-mem=0
+addr=127.0.0.1:7002 fd=9 name=ioredis-cluster(subscriber) age=1 idle=1 flags=P db=0 sub=6 psub=2 ssub=0 multi=-1 qbuf=0 
+## 7003 slave
+addr=127.0.0.1:52292 fd=20 name= age=1 idle=1 flags=M db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=4 argv-mem=0 mu
+## 7004 slave
+addr=127.0.0.1:51758 fd=20 name= age=1 idle=1 flags=M db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=4 argv-mem=0 mu
+## 7005 slave
+addr=127.0.0.1:56328 fd=20 name= age=1 idle=1 flags=M db=0 sub=0 psub=0 ssub=0 multi=-1 qbuf=0 qbuf-free=4 argv-mem=0 mu

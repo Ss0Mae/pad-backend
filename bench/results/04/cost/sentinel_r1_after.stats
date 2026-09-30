@@ -1,0 +1,55 @@
+## port 6380
+total_commands_processed:1907
+total_net_input_bytes:387389
+total_net_output_bytes:1728382
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:758796
+pubsub_channels:9
+cmdstat_publish:calls=1598,usec=15329,usec_per_call=9.59,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=158,usec=246,usec_per_call=1.56,rejected_calls=0,failed_calls=0
+cmdstat_subscribe:calls=7,usec=40,usec_per_call=5.71,rejected_calls=0,failed_calls=0
+cmdstat_replconf:calls=104,usec=328,usec_per_call=3.15,rejected_calls=0,failed_calls=0
+role:master
+## port 6381
+total_commands_processed:1876
+total_net_input_bytes:393141
+total_net_output_bytes:208680
+total_net_repl_input_bytes:379398
+total_net_repl_output_bytes:0
+pubsub_channels:1
+cmdstat_subscribe:calls=3,usec=9,usec_per_call=3.00,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=161,usec=147,usec_per_call=0.91,rejected_calls=0,failed_calls=0
+cmdstat_publish:calls=1673,usec=4023,usec_per_call=2.40,rejected_calls=0,failed_calls=0
+role:slave
+## port 6382
+total_commands_processed:1876
+total_net_input_bytes:393141
+total_net_output_bytes:208699
+total_net_repl_input_bytes:379398
+total_net_repl_output_bytes:0
+pubsub_channels:1
+cmdstat_subscribe:calls=3,usec=10,usec_per_call=3.33,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=161,usec=147,usec_per_call=0.91,rejected_calls=0,failed_calls=0
+cmdstat_publish:calls=1673,usec=3268,usec_per_call=1.95,rejected_calls=0,failed_calls=0
+role:slave
+## port 26380
+total_commands_processed:165
+total_net_input_bytes:8957
+total_net_output_bytes:6891
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:0
+pubsub_channels:0
+## port 26381
+total_commands_processed:156
+total_net_input_bytes:8432
+total_net_output_bytes:2921
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:0
+pubsub_channels:0
+## port 26382
+total_commands_processed:156
+total_net_input_bytes:8432
+total_net_output_bytes:2921
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:0
+pubsub_channels:0

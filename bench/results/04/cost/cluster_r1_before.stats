@@ -1,0 +1,70 @@
+## port 7000
+total_commands_processed:28
+total_net_input_bytes:54368
+total_net_output_bytes:31286
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:273
+pubsub_channels:0
+cmdstat_replconf:calls=7,usec=94,usec_per_call=13.43,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=1,usec=1,usec_per_call=1.00,rejected_calls=0,failed_calls=0
+role:master
+cluster_stats_messages_sent:49
+cluster_stats_messages_received:49
+## port 7001
+total_commands_processed:39
+total_net_input_bytes:57341
+total_net_output_bytes:25237
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:273
+pubsub_channels:8
+cmdstat_subscribe:calls=4,usec=33,usec_per_call=8.25,rejected_calls=0,failed_calls=0
+cmdstat_replconf:calls=7,usec=88,usec_per_call=12.57,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=1,usec=1,usec_per_call=1.00,rejected_calls=0,failed_calls=0
+role:master
+cluster_stats_messages_sent:49
+cluster_stats_messages_received:49
+## port 7002
+total_commands_processed:26
+total_net_input_bytes:60957
+total_net_output_bytes:23999
+total_net_repl_input_bytes:0
+total_net_repl_output_bytes:273
+pubsub_channels:0
+cmdstat_replconf:calls=7,usec=86,usec_per_call=12.29,rejected_calls=0,failed_calls=0
+cmdstat_ping:calls=1,usec=1,usec_per_call=1.00,rejected_calls=0,failed_calls=0
+role:master
+cluster_stats_messages_sent:51
+cluster_stats_messages_received:51
+## port 7003
+total_commands_processed:13
+total_net_input_bytes:748
+total_net_output_bytes:12741
+total_net_repl_input_bytes:273
+total_net_repl_output_bytes:0
+pubsub_channels:0
+cmdstat_ping:calls=1,usec=0,usec_per_call=0.00,rejected_calls=0,failed_calls=0
+role:slave
+cluster_stats_messages_sent:49
+cluster_stats_messages_received:49
+## port 7004
+total_commands_processed:13
+total_net_input_bytes:748
+total_net_output_bytes:12741
+total_net_repl_input_bytes:273
+total_net_repl_output_bytes:0
+pubsub_channels:0
+cmdstat_ping:calls=1,usec=1,usec_per_call=1.00,rejected_calls=0,failed_calls=0
+role:slave
+cluster_stats_messages_sent:51
+cluster_stats_messages_received:51
+## port 7005
+total_commands_processed:13
+total_net_input_bytes:748
+total_net_output_bytes:13038
+total_net_repl_input_bytes:273
+total_net_repl_output_bytes:0
+pubsub_channels:0
+cmdstat_ping:calls=1,usec=1,usec_per_call=1.00,rejected_calls=0,failed_calls=0
+role:slave
+cluster_stats_messages_sent:48
+cluster_stats_messages_received:48

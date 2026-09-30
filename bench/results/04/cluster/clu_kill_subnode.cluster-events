@@ -1,0 +1,8 @@
+29448:M 30 Sep 2026 14:12:15.612 # Failover auth granted to afcfb103b7ea5862b71e4a0fb4272c936e6fa5a0 for epoch 7
+29455:M 30 Sep 2026 14:12:14.990 * FAIL message received from 294d88273579bf773ce87b1319154a4555027c5b about 86e10062d3b473b6330a714b9e6ae3c063155bd3
+29455:M 30 Sep 2026 14:12:15.612 # Failover auth granted to afcfb103b7ea5862b71e4a0fb4272c936e6fa5a0 for epoch 7
+29469:S 30 Sep 2026 14:12:14.990 * FAIL message received from 294d88273579bf773ce87b1319154a4555027c5b about 86e10062d3b473b6330a714b9e6ae3c063155bd3
+29476:S 30 Sep 2026 14:12:14.989 * FAIL message received from 294d88273579bf773ce87b1319154a4555027c5b about 86e10062d3b473b6330a714b9e6ae3c063155bd3
+29476:S 30 Sep 2026 14:12:15.608 # Starting a failover election for epoch 7.
+29476:S 30 Sep 2026 14:12:15.615 # Failover election won: I'm the new master.
+29476:S 30 Sep 2026 14:12:15.615 # configEpoch set to 7 after successful failover

@@ -129,10 +129,11 @@ def stage4():
         return vals
     groups=[('Sentinel\nSIGKILL 기본',f'{R}/04/sentinel/sent_kill_r*.res'),('Sentinel\nSIGSTOP 기본',f'{R}/04/sentinel/sent_pause_r*.res'),
             ('Sentinel\nSIGKILL +fd',f'{R}/04/sentinel/sent_kill_fd_r*.res'),('Sentinel\nSIGSTOP +fd',f'{R}/04/sentinel/sent_pause_fd_r*.res'),
-            ('Cluster\nSIGKILL',f'{R}/04/cluster/clu_kill_r*.res'),('Cluster\nSIGSTOP',f'{R}/04/cluster/clu_pause_r*.res')]
+            ('Cluster\nSIGKILL',f'{R}/04/cluster/clu_kill_r*.res'),('Cluster\nSIGSTOP',f'{R}/04/cluster/clu_pause_r*.res'),
+            ('Cluster SIGKILL\n구독 붙은 마스터',f'{R}/04/cluster/clu_kill_subnode.res'),('Cluster SIGSTOP\n구독 없는 마스터',f'{R}/04/cluster/clu_pause_nosub.res')]
     groups=[(n,p) for n,p in groups if glob.glob(p)]
     if not groups: return
-    fig,axs=plt.subplots(1,2,figsize=(13,4.6))
+    fig,axs=plt.subplots(1,2,figsize=(15,4.8))
     x=list(range(len(groups))); w=0.3
     for j,key in enumerate(['recovered_at_s']):
         vals=[med(p,key) for _,p in groups]
@@ -140,15 +141,15 @@ def stage4():
             for r,val in enumerate(v):
                 capped=min(val,60); col=C[0] if 'Sentinel' in groups[i][0] else C[1]
                 b=axs[0].bar(i+(r-0.5)*w,capped,w,color=col,alpha=1 if r==0 else .6)
-                axs[0].annotate('복구 안 됨' if val>=59 else f'{val:.1f}s',(i+(r-0.5)*w,capped),ha='center',va='bottom',fontsize=8,xytext=(0,2),textcoords='offset points')
+                axs[0].annotate('복구 안 됨' if val>=59 else f'{max(val,0):.1f}s',(i+(r-0.5)*w,capped),ha='center',va='bottom',fontsize=8,xytext=(0,2+10*r if val>=59 else 2),textcoords='offset points')
     axs[0].set_title('복구 시점 (s, 장애 후) — 회차별, 60 s = 측정 창 끝까지 미복구'); axs[0].set_ylim(0,70)
     lost=[med(p,'lost_cross_deliveries') for _,p in groups]; late=[med(p,'late_over_1s') for _,p in groups]
     for i in x:
         for r in range(len(lost[i])):
             b1=axs[1].bar(i+(r-0.5)*w,lost[i][r],w,color=C[1],alpha=1 if r==0 else .6); b2=axs[1].bar(i+(r-0.5)*w,late[i][r],w,bottom=lost[i][r],color=C[3],alpha=1 if r==0 else .6)
             axs[1].annotate(f'{lost[i][r]+late[i][r]:,}',(i+(r-0.5)*w,lost[i][r]+late[i][r]),ha='center',va='bottom',fontsize=8,xytext=(0,2),textcoords='offset points')
-    axs[1].set_title('다른 서버 전달: 유실(주황) + 1초 넘게 지연(노랑), 건수'); 
-    for ax in axs: ax.set_xticks(x); ax.set_xticklabels([g[0] for g in groups],fontsize=9)
+    axs[1].set_title('다른 서버 전달: 유실(주황) + 1초 넘게 지연(노랑), 건수'); axs[1].set_ylim(0,max(l+t for a,b in zip(lost,late) for l,t in zip(a,b))*1.18); 
+    for ax in axs: ax.set_xticks(x); ax.set_xticklabels([g[0] for g in groups],fontsize=8)
     fig.suptitle('4단계 · Sentinel vs Cluster 페일오버 (20명·50 msg/s·75초, 15초에 장애)',x=0.01,ha='left',fontsize=14,fontweight='bold')
     fig.tight_layout(); fig.savefig(f'{OUT}/04-failover-sentinel-vs-cluster.png',dpi=150); plt.close(fig)
     # 타임라인: 각 구성 r1

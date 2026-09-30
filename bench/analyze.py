@@ -1,5 +1,5 @@
-import json,sys
-d=json.load(open(sys.argv[1]))
+import json,sys,gzip
+f=sys.argv[1]; d=json.load(gzip.open(f,'rt') if f.endswith('.gz') else open(f))
 port={u['i']:u['port'] for u in d['users']}; N=d['USERS']; F=d.get('faultT')
 sent={int(k):v for k,v in d['sent']}
 got={}
@@ -31,6 +31,14 @@ for mid,s in sent.items():
     for ui in range(N):
         if port[ui]!=s['port'] and (ui not in r or r[ui]-s['at']>1000): bad.append(s['at']); break
 res['disrupted_messages']=len(bad)
+# 초별 p99 의 중앙값·최대: 전체 p99 가 몇 초짜리 순간 정체(GC·CPU 스틸)에 끌려가는지, 정상 상태는 어떤지 가른다
+sec={}
+for mid,s in sent.items():
+    k=int((s['at']-d['start'])/1000)
+    for ui,t in got.get(mid,{}).items(): sec.setdefault(k,[]).append(t-s['at'])
+secp=[q(v,.99) for k,v in sorted(sec.items()) if k<d['DUR']]
+res['p99_per_sec_median']=q(secp,.5); res['p99_per_sec_max']=max(secp) if secp else None
+res['secs_over_100ms']=sum(1 for v in secp if v>100)
 res['sent_rate']=round(len(sent)/d['DUR'],1)
 res['deliveries_per_s']=round(len(sent)*N/d['DUR'])
 res['loader_cpu_pct']=round(d['loaderCpu']) if 'loaderCpu' in d else None

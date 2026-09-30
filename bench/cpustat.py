@@ -6,10 +6,11 @@ def mem(s):
     s=s.rstrip('+-'); u=s[-1]; v=float(s[:-1]) if u in 'KMG' else float(s)
     return v*{'K':1,'M':1024,'G':1048576}.get(u,1)/1024  # MB
 rows={}
-first=set()
-for line in open(f):
+first=set(); lines=open(f).read().splitlines(); linux=bool(lines) and lines[0].startswith('# linux')
+for line in lines:
+    if line.startswith('#'): continue
     t,pid,cpu,m=line.split()[:4]
-    if pid not in first: first.add(pid); continue   # 첫 표본(수명 전체 평균) 제외
+    if not linux and pid not in first: first.add(pid); continue   # macOS top 첫 표본(수명 전체 평균) 제외
     t=float(t)
     if t<lo or t>hi: continue
     rows.setdefault(pid,[]).append((float(cpu),mem(m)))

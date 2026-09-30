@@ -1,5 +1,8 @@
 # bench/results/ 의 원시 결과에서 보고서용 그래프를 만든다. usage: charts.py [01|02|03|04|all]
-import json, os, sys, glob, statistics
+import json, os, sys, glob, statistics, gzip
+def jload(f):
+    if not os.path.exists(f) and os.path.exists(f+'.gz'): f=f+'.gz'
+    return json.load(gzip.open(f,'rt') if f.endswith('.gz') else open(f))
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 BG='#fcfcfb'; C=['#2a78d6','#eb6834','#1baf7a','#eda100']
@@ -8,7 +11,9 @@ plt.rcParams.update({'font.family':'AppleGothic','axes.unicode_minus':False,'fig
 R='bench/results'; OUT='bench/charts'; os.makedirs(OUT,exist_ok=True)
 def res(path):
     lines=[l for l in open(path).read().splitlines() if l.startswith('{')]
+    if not lines: return None,None
     a=json.loads(lines[0]); c=json.loads(lines[1]) if len(lines)>1 else {}
+    c={k:v for k,v in c.items() if k!='sys'}   # 기계 전체 행은 프로세스 통계에서 뺀다
     return a,c
 def label(ax,bars,fmt='{:.0f}',dy=0):
     for b in bars:
@@ -17,7 +22,7 @@ def label(ax,bars,fmt='{:.0f}',dy=0):
         ax.annotate(fmt.format(h),(b.get_x()+b.get_width()/2,h),ha='center',va='bottom',fontsize=9,xytext=(0,2+dy),textcoords='offset points')
 def series(js, bucket=1.0, cross=True):
     """송신 시각(장애 기준 상대 s) 버킷별 (다른|같은) 서버 전달률과 p99."""
-    d=json.load(open(js)); port={u['i']:u['port'] for u in d['users']}; N=d['USERS']; F=d.get('faultT') or d['start']
+    d=jload(js); port={u['i']:u['port'] for u in d['users']}; N=d['USERS']; F=d.get('faultT') or d['start']
     sent={int(k):v for k,v in d['sent']}; got={}
     for mid,ui,t in d['recv']: got.setdefault(mid,{})[ui]=t
     b={}
@@ -34,7 +39,9 @@ def series(js, bucket=1.0, cross=True):
 def stage1():
     cells={}
     for f in sorted(glob.glob(f'{R}/01/n*_r*.res')):
-        n,r=os.path.basename(f)[:-4].split('_'); a,c=res(f); cpu=list(c.values())[0] if c else {}
+        n,r=os.path.basename(f)[:-4].split('_'); a,c=res(f)
+        if a is None: continue
+        cpu=list(c.values())[0] if c else {}
         cells[(int(n[1:]),int(r[1:]))]=(a,cpu)
     if not cells: return
     Ns=sorted({k[0] for k in cells}); Rs=sorted({k[1] for k in cells})
@@ -49,9 +56,10 @@ def stage1():
         for n in xs: axs[2].annotate(f"{cells[(n,r)][0]['loader_cpu_pct']}",(n,cells[(n,r)][0]['loader_cpu_pct']),fontsize=8,xytext=(3,3),textcoords='offset points')
     axs[0].axhline(100,ls='--',color='#999',lw=1); axs[0].set_yscale('log'); axs[0].set_title('전달 지연 p99 (ms, 로그축) — 점선 100 ms'); axs[0].set_xlabel('채널 사용자 수 N')
     axs[1].set_title('서버 프로세스 CPU 평균 (%)'); axs[1].set_xlabel('채널 사용자 수 N')
-    axs[2].set_title('부하기 CPU 합계 (%, 프로세스 4개)'); axs[2].set_xlabel('채널 사용자 수 N')
+    W=next(iter(cells.values()))[0].get('workers',1)
+    axs[2].axhline(90*W,ls='--',color='#999',lw=1); axs[2].set_title(f'부하기 CPU 합 (%, {W}프로세스) · 점선 = 프로세스당 90%'); axs[2].set_xlabel('채널 사용자 수 N')
     for ax in axs: ax.legend(frameon=False,fontsize=9); ax.set_xticks(Ns)
-    fig.suptitle('1단계 · 서버 1대: 채널 1개 팬아웃 N×R (노트북 1대, 30초)',x=0.01,ha='left',fontsize=14,fontweight='bold')
+    fig.suptitle(f"1단계 · 서버 1대: 채널 1개 팬아웃 N×R ({os.environ.get('ENV_LABEL','EC2 t3.small, 부하기 t3.medium')}, 30초)",x=0.01,ha='left',fontsize=14,fontweight='bold')
     fig.tight_layout(); fig.savefig(f'{OUT}/01-single-server-limit.png',dpi=150); plt.close(fig)
     # 팬아웃(전달/초) 대 p99 산점
     fig,ax=plt.subplots(figsize=(7,4.2))
@@ -90,7 +98,7 @@ def stage2():
     label(axs[2],b1,'{:.0f}%'); label(axs[2],b2,'{:.1f}%'); axs[2].set_title('CPU 평균 (%)'); axs[2].legend(frameon=False)
     for ax in axs: ax.set_xticks(list(x)); ax.set_xticklabels([names[k] for k in keys])
     a0=rows[keys[0]][0][0]
-    fig.suptitle(f"2단계 · 서버 2대, 사용자 {a0['messages']//a0['sent_rate']//30*0+int(json.load(open(glob.glob(f'{R}/02/{keys[0]}_r1.json')[0]))['USERS'])}명·{a0['sent_rate']:.0f} msg/s (2회 평균)",x=0.01,ha='left',fontsize=14,fontweight='bold')
+    fig.suptitle(f"2단계 · 서버 2대, 사용자 {a0['messages']//a0['sent_rate']//30*0+int(jload(f'{R}/02/{keys[0]}_r1.json')['USERS'])}명·{a0['sent_rate']:.0f} msg/s (2회 평균)",x=0.01,ha='left',fontsize=14,fontweight='bold')
     fig.tight_layout(); fig.savefig(f'{OUT}/02-two-servers-adapter.png',dpi=150); plt.close(fig)
 
 def stage3():
@@ -98,7 +106,7 @@ def stage3():
     for i,(k,t) in enumerate([('dead','Redis 죽인 뒤 방치'),('restart','30초 뒤 같은 포트로 재기동')]):
         for r in (1,2):
             f=f'{R}/03/{k}_r{r}.json'
-            if not os.path.exists(f): continue
+            if not (os.path.exists(f) or os.path.exists(f+'.gz')): continue
             ks,cr,_=series(f); _,sm,_=series(f,cross=False)
             axs[i].plot(ks,cr,color=C[1],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'다른 서버 전달률 (r{r})')
             axs[i].plot(ks,sm,color=C[0],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'같은 서버 전달률 (r{r})')

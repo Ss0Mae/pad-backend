@@ -9,6 +9,7 @@ const { io } = require('socket.io-client');
 const fs = require('fs');
 const { execSync, fork } = require('child_process');
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
+const HOST = arg('host', '127.0.0.1');   // 서버 주소. 출력의 t0 는 epoch ms 라 다른 기계에서 낸 장애 시각과 맞출 수 있다.
 const ports = arg('ports', '3001,3002').split(',').map(Number);
 const USERS = +arg('users', 20), RATE = +arg('rate', 50), DUR = +arg('duration', 30), CH = +arg('channel', 1);
 const SENDERS = Math.min(USERS, +arg('senders', USERS));
@@ -34,7 +35,7 @@ if (WORKERS > 1 && SHARD < 0) {
   if (FAULT_CMD) setTimeout(() => { faultT = runFault(FAULT_CMD, 'fault'); }, CONNECT_MS + FAULT_AT * 1000);
   if (FAULT2_CMD) setTimeout(() => { fault2T = runFault(FAULT2_CMD, 'fault2'); }, CONNECT_MS + FAULT2_AT * 1000);
   Promise.all(kids).then(() => {
-    const merged = { ports, USERS, RATE, DUR, SENDERS, WORKERS, start: null, faultT, fault2T, users: [], sent: [], recv: [], loaderCpu: 0, loaderCpuParts: [] };
+    const merged = { t0: T0, host: HOST, ports, USERS, RATE, DUR, SENDERS, WORKERS, start: null, faultT, fault2T, users: [], sent: [], recv: [], loaderCpu: 0, loaderCpuParts: [] };
     for (const p of parts) {
       const d = JSON.parse(fs.readFileSync(p)); fs.unlinkSync(p);
       merged.start = merged.start === null ? d.start : Math.min(merged.start, d.start);
@@ -59,7 +60,7 @@ let faultT = null, fault2T = null;
 function connect(i) {
   return new Promise(res => {
     const port = ports[i % ports.length], userId = BASE + i;
-    const s = io(`http://127.0.0.1:${port}/chat`, { query: { userId }, transports: ['websocket'], reconnection: true });
+    const s = io(`http://${HOST}:${port}/chat`, { query: { userId }, transports: ['websocket'], reconnection: true });
     const u = { i, userId, port, s, joined: false };
     s.on('message', m => { try { const c = JSON.parse(m.content); recv.push([c.id, i, now()]); } catch (e) {} });
     s.on('channelJoined', () => { u.joined = true; res(u); });
@@ -98,7 +99,7 @@ function connect(i) {
   await new Promise(r => setTimeout(r, DUR * 1000 + 8000));
   const meta = users.map(u => ({ i: u.i, port: u.port }));
   const loaderCpu = cpuPct(cpu0, cpu1 || process.cpuUsage(), (cpuEnd || now()) - start);
-  fs.writeFileSync(OUT, JSON.stringify({ ports, USERS, RATE, DUR, SENDERS, WORKERS: K, start, faultT, fault2T, users: meta, sent: [...sent], recv, loaderCpu }));
+  fs.writeFileSync(OUT, JSON.stringify({ t0: T0, host: HOST, ports, USERS, RATE, DUR, SENDERS, WORKERS: K, start, faultT, fault2T, users: meta, sent: [...sent], recv, loaderCpu }));
   users.forEach(u => u.s.close());
   console.error('done', sent.size, 'sent', recv.length, 'recv', 'loaderCpu', loaderCpu.toFixed(0) + '%');
   process.exit(0);

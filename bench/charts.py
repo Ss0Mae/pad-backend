@@ -102,19 +102,22 @@ def stage2():
     fig.tight_layout(); fig.savefig(f'{OUT}/02-two-servers-adapter.png',dpi=150); plt.close(fig)
 
 def stage3():
-    fig,axs=plt.subplots(2,1,figsize=(11,6.4),sharex=True)
-    for i,(k,t) in enumerate([('dead','Redis 죽인 뒤 방치'),('restart','30초 뒤 같은 포트로 재기동')]):
+    modes=[('dead','(a) Redis kill -9 후 방치'),('restart','(b) 30초 뒤 같은 포트로 재기동'),('restart_warn','(c) (b) + 서버를 --unhandled-rejections=warn 으로 띄움 (벤치 전용)')]
+    modes=[(k,t) for k,t in modes if glob.glob(f'{R}/03/{k}_r1.json*')]
+    fig,axs=plt.subplots(len(modes),1,figsize=(11,3.1*len(modes)+0.6),sharex=True); axs=list(axs) if len(modes)>1 else [axs]
+    for i,(k,t) in enumerate(modes):
         for r in (1,2):
             f=f'{R}/03/{k}_r{r}.json'
             if not (os.path.exists(f) or os.path.exists(f+'.gz')): continue
             ks,cr,_=series(f); _,sm,_=series(f,cross=False)
-            axs[i].plot(ks,cr,color=C[1],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'다른 서버 전달률 (r{r})')
-            axs[i].plot(ks,sm,color=C[0],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'같은 서버 전달률 (r{r})')
-        axs[i].axvline(0,color='#333',ls='--',lw=1); axs[i].text(0.3,50,'kill -9',fontsize=9)
-        if k=='restart': axs[i].axvline(30,color='#1baf7a',ls='--',lw=1); axs[i].text(30.3,50,'재기동',fontsize=9,color='#1baf7a')
-        axs[i].set_ylim(-5,110); axs[i].set_ylabel('1초 안 전달률 (%)'); axs[i].set_title(f'{t}'); axs[i].legend(frameon=False,fontsize=8,loc='lower right')
-    axs[1].set_xlabel('장애 기준 송신 시각 (s)')
-    fig.suptitle('3단계 · 단일 Redis 장애 (서버 2대 + 어댑터, 20명·50 msg/s)',x=0.01,ha='left',fontsize=14,fontweight='bold')
+            axs[i].plot(ks,cr,color=C[1],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'다른 서버 (r{r})')
+            axs[i].plot(ks,sm,color=C[0],lw=1.8 if r==1 else 1,alpha=1 if r==1 else .5,label=f'같은 서버 (r{r})')
+        axs[i].axvline(0,color='#333',ls='--',lw=1); axs[i].text(0.4,50,'kill -9',fontsize=9)
+        if k!='dead': axs[i].axvline(30,color='#1baf7a',ls='--',lw=1); axs[i].text(30.4,50,'Redis 재기동',fontsize=9,color='#1baf7a')
+        if k!='restart_warn': axs[i].axvspan(10,11,color='#eb6834',alpha=.15); axs[i].text(11.2,20,'서버 프로세스 2개 모두 종료\n(MaxRetriesPerRequestError 미처리)',fontsize=8,color='#eb6834')
+        axs[i].set_ylim(-5,110); axs[i].set_ylabel('1초 안 전달률 (%)'); axs[i].set_title(t); axs[i].legend(frameon=False,fontsize=8,loc='center right')
+    axs[-1].set_xlabel('장애 기준 송신 시각 (s)')
+    fig.suptitle('3단계 · 단일 Redis 장애 (서버 2대 + 어댑터, 20명·50 msg/s, 회차 1 진하게)',x=0.01,ha='left',fontsize=14,fontweight='bold')
     fig.tight_layout(); fig.savefig(f'{OUT}/03-redis-spof.png',dpi=150); plt.close(fig)
 
 def stage4():

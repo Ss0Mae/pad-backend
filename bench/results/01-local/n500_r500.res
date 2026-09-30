@@ -1,0 +1,2 @@
+{"messages": 15000, "same_node_delivery": 1.0, "cross_node_delivery": null, "lost_cross_deliveries": 0, "lost_same_deliveries": 0, "lost_window_s": null, "late_over_1s": 4967831, "late_window_s": [3.67, 32.64], "p50_ms": 1658, "p99_ms": 6102, "max_ms": 7015, "disrupted_messages": 0, "sent_rate": 500.0, "deliveries_per_s": 250000, "loader_cpu_pct": 220, "senders": 500, "workers": 4, "recovered_at_s": 0}
+{"93005": {"n": 27, "cpu_avg": 97.8, "cpu_peak": 111.1, "mem_max_mb": 457.0}}

@@ -1,0 +1,2 @@
+{"messages": 1500, "same_node_delivery": 1.0, "cross_node_delivery": null, "lost_cross_deliveries": 0, "lost_same_deliveries": 0, "lost_window_s": null, "late_over_1s": 0, "late_window_s": null, "p50_ms": 1, "p99_ms": 2, "max_ms": 10, "disrupted_messages": 0, "sent_rate": 50.0, "deliveries_per_s": 2500, "loader_cpu_pct": 12, "senders": 50, "workers": 4, "recovered_at_s": 0}
+{"76198": {"n": 26, "cpu_avg": 4.3, "cpu_peak": 6.1, "mem_max_mb": 189.0}}

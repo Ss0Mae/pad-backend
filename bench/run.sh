@@ -1,9 +1,9 @@
 #!/bin/bash
 # usage: run.sh <name> <none|kill|pause> [app env...]
 cd "$(dirname "$0")/.."; NAME=$1; FAULT=$2; shift 2
-bench/stop.sh; bash bench/redis-sentinel.sh >/dev/null; mysql -uroot pad -e "DELETE FROM online_users"
+bench/stop.sh; bash bench/redis-sentinel.sh >/dev/null; mysql -h127.0.0.1 -uroot pad -e "DELETE FROM online_users"
 SENT="REDIS_SENTINELS=127.0.0.1:26380,127.0.0.1:26381,127.0.0.1:26382 REDIS_MASTER_NAME=pad-master"
-bench/start.sh 3001 $SENT "$@"; bench/start.sh 3002 $SENT "$@"; sleep 12
+bench/start.sh 3001 $SENT "$@"; bench/start.sh 3002 $SENT "$@"; bench/wait-up.sh 3001 3002 || exit 1; sleep 3
 case $FAULT in
   kill) CMD='kill -9 $(redis-cli -p 6380 info server | grep process_id | cut -d: -f2 | tr -d "\r") && echo killed';;
   pause) CMD='kill -STOP $(redis-cli -p 6380 info server | grep process_id | cut -d: -f2 | tr -d "\r") && echo stopped';;

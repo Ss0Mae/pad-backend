@@ -1,0 +1,2 @@
+{"messages": 15000, "same_node_delivery": 1.0, "cross_node_delivery": null, "lost_cross_deliveries": 0, "lost_same_deliveries": 0, "lost_window_s": null, "late_over_1s": 0, "late_window_s": null, "p50_ms": 1, "p99_ms": 3, "max_ms": 22, "disrupted_messages": 0, "sent_rate": 500.0, "deliveries_per_s": 25000, "loader_cpu_pct": 53, "senders": 50, "workers": 4, "recovered_at_s": 0}
+{"86537": {"n": 27, "cpu_avg": 23.5, "cpu_peak": 35.5, "mem_max_mb": 158.0}}

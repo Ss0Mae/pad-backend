@@ -31,5 +31,9 @@ for mid,s in sent.items():
     for ui in range(N):
         if port[ui]!=s['port'] and (ui not in r or r[ui]-s['at']>1000): bad.append(s['at']); break
 res['disrupted_messages']=len(bad)
+res['sent_rate']=round(len(sent)/d['DUR'],1)
+res['deliveries_per_s']=round(len(sent)*N/d['DUR'])
+res['loader_cpu_pct']=round(d['loaderCpu']) if 'loaderCpu' in d else None
+res['senders']=d.get('SENDERS'); res['workers']=d.get('WORKERS')
 res['recovered_at_s']=rel(max(bad)) if bad else 0
 print(json.dumps(res,ensure_ascii=False))
